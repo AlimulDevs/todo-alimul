@@ -51,28 +51,31 @@ function App() {
     //   setDarkMode(savedTheme === "dark");
     // }
 
-      const getTodos = async () => {
-         const postaPI = await fetch("https://todo-list.dummy-code.site/api/v1/data-list", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-token": "secret123",
+    const getTodos = async () => {
+      const postaPI = await fetch(
+        "https://todo-list.dummy-code.site/api/v1/data-list",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-token": "secret123",
+          },
         }
-      });
+      );
 
-      const result  = await postaPI.json();
-  // filter data agar tidak ada object kosong
-  const newData: Todo[] = result.data.filter((item: any) => item && Object.keys(item).length > 0);
+      const result = await postaPI.json();
+      // filter data agar tidak ada object kosong
+      const newData: Todo[] = result.data.filter(
+        (item: any) => item && Object.keys(item).length > 0
+      );
 
-  setTodos(newData);
-      }
+      setTodos(newData);
+    };
 
-      getTodos()
-
+    getTodos();
   }, []);
 
   // Save todos to localStorage whenever todos change
-
 
   // Save theme to localStorage whenever theme changes
   useEffect(() => {
@@ -81,65 +84,86 @@ function App() {
 
   const addTodo = async () => {
     if (newTodo.trim()) {
+      const postaPI = await fetch(
+        "https://todo-list.dummy-code.site/api/v1/data-list",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-token": "secret123",
+          },
+          body: JSON.stringify({
+            text: newTodo.trim(),
+            completed: false,
+            created_at: new Date().toString(),
+          }),
+        }
+      );
 
-
-
-
-      const postaPI = await fetch("https://todo-list.dummy-code.site/api/v1/data-list", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-token": "secret123",
-        },
-        body: JSON.stringify({
-          text: newTodo.trim(),
-          completed: false,
-          created_at  : new Date().toString(),
-        }),
-      });
-
-      const result  = await postaPI.json();
-    const newData : Todo = result.data
+      const result = await postaPI.json();
+      const newData: Todo = result.data;
 
       setTodos([newData, ...todos]);
       setNewTodo("");
     }
   };
 
-  const toggleTodo = (id: string) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+  const toggleTodo = async (id: string) => {
+    const todoBeforeUpdate = todos.find((t) => t.id === id);
+    if (!todoBeforeUpdate) return;
+
+    const updatedCompleted = !todoBeforeUpdate.completed;
+
+    const putApi = await fetch(
+      `https://todo-list.dummy-code.site/api/v1/data-list/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-token": "secret123",
+        },
+        body: JSON.stringify({ completed: updatedCompleted }),
+      }
     );
 
-    const todo = todos.find((t) => t.id === id);
-    if (todo && !todo.completed) {
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
+    const result = await putApi.json();
+
+    if (result.status === "success") {
+      setTodos(
+        todos.map((todo) =>
+          todo.id === id ? { ...todo, completed: updatedCompleted } : todo
+        )
+      );
+
+      if (updatedCompleted) {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 3000);
+      }
     }
   };
 
   const deleteTodo = async (id: string) => {
-       const deleteApi = await fetch(`https://todo-list.dummy-code.site/api/v1/data-list/${id}`, {
+    const deleteApi = await fetch(
+      `https://todo-list.dummy-code.site/api/v1/data-list/${id}`,
+      {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           "x-token": "secret123",
-        }
-      });
-      const result  = await deleteApi.json();
-
-      if (result.status === "success") {
-         setTodos(todos.filter((todo) => todo.id !== id));
+        },
       }
+    );
+    const result = await deleteApi.json();
 
-    
+    if (result.status === "success") {
+      setTodos(todos.filter((todo) => todo.id !== id));
+    }
   };
 
   const updateTodo = async (id: string, text: string) => {
-
-     const putApi = await fetch(`https://todo-list.dummy-code.site/api/v1/data-list/${id}`, {
+    const putApi = await fetch(
+      `https://todo-list.dummy-code.site/api/v1/data-list/${id}`,
+      {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -147,11 +171,17 @@ function App() {
         },
         body: JSON.stringify({
           text: text,
-
         }),
-      });
-  
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, text } : todo)));
+      }
+    );
+
+    const result = await putApi.json();
+
+    if (result.status === "success") {
+      setTodos(
+        todos.map((todo) => (todo.id === id ? { ...todo, text } : todo))
+      );
+    }
   };
 
   const isDateInRange = (date: Date) => {
@@ -323,7 +353,7 @@ function App() {
                 : "bg-black/60 border-gray-600"
             } shadow-2xl`}
           >
-            <div className="flex gap-4">
+            {/* <div className="flex gap-4">
               <input
                 type="text"
                 value={newTodo}
@@ -345,7 +375,7 @@ function App() {
                 <Plus size={20} />
                 Add
               </motion.button>
-            </div>
+            </div> */}
           </div>
         </motion.div>
 
