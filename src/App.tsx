@@ -115,7 +115,7 @@ function App() {
     console.log(updatedCompleted)
 
     const putApi = await fetch(
-      `https://todo-list.dummy-code.site/api/v1/data-list/${id}`,
+      `https://todo-list.dummy-code.site/api/v1/data-list/activation/${id}`,
       {
         method: "PUT",
         headers: {
