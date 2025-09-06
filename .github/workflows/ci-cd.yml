@@ -41,7 +41,13 @@ jobs:
       - name: Deploy to VPS using SSH Passwords
         run: |
           sshpass -p "${{ secrets.VPS_SSH_PASSWORD }}" ssh -p 22 -o StrictHostKeyChecking=no "${{ secrets.VPS_USERNAME }}"@"${{ secrets.VPS_IP }}" << 'EOF'
+            cd /home/apps/docker-runner/todo-web-dummy-code-runner   # Sesuaikan dengan path aplikasi
+            docker system prune -af || true
+            docker compose pull todo-web-dummy-code
+            docker compose down -v todo-web-dummy-code
+            docker compose up -d todo-web-dummy-code
 
+            docker image prune -af
           EOF
         env:
           VPS_SSH_PASSWORD: ${{ secrets.VPS_SSH_PASSWORD }}
