@@ -353,7 +353,7 @@ function App() {
                 : "bg-black/60 border-gray-600"
             } shadow-2xl`}
           >
-            {/* <div className="flex gap-4">
+            <div className="flex gap-4">
               <input
                 type="text"
                 value={newTodo}
@@ -375,7 +375,7 @@ function App() {
                 <Plus size={20} />
                 Add
               </motion.button>
-            </div> */}
+            </div>
           </div>
         </motion.div>
 
