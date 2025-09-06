@@ -137,7 +137,19 @@ function App() {
     
   };
 
-  const updateTodo = (id: string, text: string) => {
+  const updateTodo = async (id: string, text: string) => {
+
+     const putApi = await fetch(`https://todo-list.dummy-code.site/api/v1/data-list/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-token": "secret123",
+        },
+        body: JSON.stringify({
+          text: text,
+
+        }),
+      });
   
     setTodos(todos.map((todo) => (todo.id === id ? { ...todo, text } : todo)));
   };
