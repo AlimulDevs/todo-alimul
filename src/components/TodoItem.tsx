@@ -110,10 +110,10 @@ const TodoItem: React.FC<TodoItemProps> = ({
             <div className={`text-xs ml-4 ${
               darkMode ? 'text-gray-500' : 'text-gray-600'
             }`}>
-              {new Date(todo.createdAt).toLocaleDateString('en-US', {
+              {new Date(todo.created_at).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
-                year: new Date(todo.createdAt).getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
+                year: new Date(todo.created_at).getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
               })}
             </div>
           </div>
