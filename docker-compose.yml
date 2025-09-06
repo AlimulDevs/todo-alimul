@@ -1,0 +1,6 @@
+services:
+  todo-web-dummy-code:
+    image: alimuldev/todo-web-dummy-code:v1.1
+    ports:
+      - "127.0.0.1:8089:80"
+    container_name: todo-web-dummy-code-container
