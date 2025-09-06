@@ -36,7 +36,6 @@ function App() {
   const [newTodo, setNewTodo] = useState("");
   const [showConfetti, setShowConfetti] = useState(false);
 
-  console.log(todos);
 
   // Load todos from localStorage on mount
   useEffect(() => {
@@ -113,6 +112,7 @@ function App() {
     if (!todoBeforeUpdate) return;
 
     const updatedCompleted = !todoBeforeUpdate.completed;
+    console.log(updatedCompleted)
 
     const putApi = await fetch(
       `https://todo-list.dummy-code.site/api/v1/data-list/${id}`,
