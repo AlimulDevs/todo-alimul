@@ -248,6 +248,7 @@ function App() {
     "Add some tasks and let's get this bread 🍞",
   ];
 
+
   return (
     <div
       className={`min-h-screen transition-all duration-500 ${
